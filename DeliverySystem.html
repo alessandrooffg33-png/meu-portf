@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzaria Ale | Delivery System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/pizzaria-style.css">
+</head>
+<body>
+
+    <div id="main-wrapper" class="main-wrapper">
+        <header class="main-header">
+            <div class="header-container">
+                <div class="logo-area">
+                    <div class="logo-box">PA</div>
+                    <h1>Pizzaria <span>Ale</span></h1>
+                </div>
+                <button class="cart-toggle" id="open-cart">
+                    🛒 Meu Pedido <span class="cart-count" id="cart-count">0</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="pizza-grid">
+                
+                <article class="pizza-card">
+                    <div class="pizza-img-container">
+                        <img id="pizza-img" src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500" alt="Pizza">
+                    </div>
+                    <div class="pizza-info">
+                        <h3>Nossas Pizzas</h3>
+                        <div class="options-group">
+                            <label>Sabor e Tamanho:</label>
+                            <select id="size-pep" class="select-style" onchange="atualizarPrecoCard('size-pep', 'price-pep'); trocarImagem();">
+                                <option value="54.90">Pizza Giga Calabresa - R$ 54,90</option>
+                                <option value="44.90">Pizza M Calabresa - R$ 44,90</option>
+                                <option value="34.90">Pizza P Calabresa - R$ 34,90</option>
+                                <option value="69.90">Pizza Giga Muçarela - R$ 69,90</option>
+                                <option value="59.90">Pizza M Muçarela - R$ 59,90</option>
+                                <option value="49.90">Pizza P Muçarela - R$ 49,90</option>
+                                <option value="69.90">Pizza Giga Portuguesa - R$ 69,90</option>
+                                <option value="59.90">Pizza M Portuguesa - R$ 59,90</option>
+                                <option value="49.90">Pizza P Portuguesa - R$ 49,90</option>
+                                <option value="69.90">Pizza Giga Quatro Queijos - R$ 69,90</option>
+                                <option value="59.90">Pizza M Quatro Queijos - R$ 59,90</option>
+                                <option value="49.90">Pizza P Quatro Queijos - R$ 49,90</option>
+                            </select>
+                        </div>
+                        <div class="price-preview">
+                            <span>Preço:</span>
+                            <span id="price-pep" class="price-val">R$ 54,90</span>
+                        </div>
+                        <button class="btn-add" onclick="adicionarAoCarrinho('Pizza', 'size-pep')">Adicionar ao Pedido</button>
+                    </div>
+                </article>
+
+                <article class="pizza-card">
+                    <div class="pizza-img-container drink-bg">
+                        <span class="drink-icon">🥤</span>
+                    </div>
+                    <div class="pizza-info">
+                        <h3>Bebidas</h3>
+                        <div class="options-group">
+                            <label>Selecione:</label>
+                            <select id="select-refri" class="select-style" onchange="atualizarPrecoCard('select-refri', 'price-refri')">
+                                <option value="14.00">Coca-Cola 2 Litros - R$ 14,00</option>
+                                <option value="10.00">Coca-Cola 1 Litro - R$ 10,00</option>
+                                <option value="12.00">Guaraná 2 Litros - R$ 12,00</option>
+                                <option value="5.00">Lata 350ml - R$ 5,00</option>
+                            </select>
+                        </div>
+                        <div class="price-preview">
+                            <span>Preço:</span>
+                            <span id="price-refri" class="price-val">R$ 14,00</span>
+                        </div>
+                        <button class="btn-add" onclick="adicionarAoCarrinho('Bebida', 'select-refri')">Adicionar ao Pedido</button>
+                    </div>
+                </article>
+
+            </div>
+        </main>
+    </div>
+
+    <aside id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h2>Seu Pedido</h2>
+            <button id="close-cart" class="btn-close-cart">✕</button>
+        </div>
+        <div id="cart-items-list" class="cart-items"></div>
+        <div class="cart-footer">
+            <div class="total-area">
+                <span>Total:</span>
+                <span id="total-price" class="total-price-val">R$ 0,00</span>
+            </div>
+            <button class="btn-checkout" onclick="finalizarPedido()">Finalizar no WhatsApp</button>
+        </div>
+    </aside>
+
+    <script>
+        let carrinho = [];
+        let total = 0;
+
+        const imagensPizza = {
+            "Calabresa": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500",
+            "Muçarela": "https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=500",
+            "Portuguesa": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500",
+            "Quatro Queijos": "https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?w=500"
+        };
+
+        const sidebar = document.getElementById('cart-sidebar');
+        const body = document.body;
+
+        document.getElementById('open-cart').onclick = () => { sidebar.classList.add('open'); body.classList.add('cart-active'); };
+        document.getElementById('close-cart').onclick = () => { sidebar.classList.remove('open'); body.classList.remove('cart-active'); };
+
+        function trocarImagem() {
+            const select = document.getElementById('size-pep');
+            const imgElement = document.getElementById('pizza-img');
+            const texto = select.options[select.selectedIndex].text;
+            
+            let saborKey = "Calabresa";
+            for (let s in imagensPizza) { if (texto.includes(s)) { saborKey = s; break; } }
+            
+            imgElement.style.opacity = "0.2";
+            setTimeout(() => {
+                imgElement.src = imagensPizza[saborKey];
+                imgElement.style.opacity = "1";
+            }, 150);
+        }
+
+        function atualizarPrecoCard(idSelect, idPrecoSpan) {
+            const val = document.getElementById(idSelect).value;
+            document.getElementById(idPrecoSpan).innerText = `R$ ${parseFloat(val).toFixed(2).replace('.', ',')}`;
+        }
+
+        function adicionarAoCarrinho(tipo, idSelect) {
+            const select = document.getElementById(idSelect);
+            const nome = select.options[select.selectedIndex].text.split(' - ')[0];
+            const preco = parseFloat(select.value);
+
+            carrinho.push({ id: Date.now(), nome, preco });
+            total += preco;
+            atualizarInterface();
+            sidebar.classList.add('open');
+            body.classList.add('cart-active');
+        }
+
+        function removerItem(id) {
+            const idx = carrinho.findIndex(i => i.id === id);
+            if (idx > -1) { total -= carrinho[idx].preco; carrinho.splice(idx, 1); }
+            atualizarInterface();
+        }
+
+        function atualizarInterface() {
+            const lista = document.getElementById('cart-items-list');
+            document.getElementById('cart-count').innerText = carrinho.length;
+            document.getElementById('total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            lista.innerHTML = carrinho.map(item => `
+                <div class="cart-item-row">
+                    <div class="item-info">
+                        <span class="item-name">${item.nome}</span>
+                        <span class="item-price">R$ ${item.preco.toFixed(2).replace('.', ',')}</span>
+                    </div>
+                    <button class="btn-remove-item" onclick="removerItem(${item.id})">✕</button>
+                </div>
+            `).join('') || '<p style="text-align:center;color:#94a3b8;margin-top:20px;">Seu carrinho está vazio</p>';
+        }
+
+        function finalizarPedido() {
+            if (carrinho.length === 0) return alert("Adicione itens primeiro!");
+            let msg = `*PEDIDO - PIZZARIA ALE*%0A%0A`;
+            carrinho.forEach(i => msg += `• ${i.nome} (R$ ${i.preco.toFixed(2)})%0A`);
+            msg += `%0A*Total: R$ ${total.toFixed(2)}*`;
+            window.open(`https://wa.me/5511999999999?text=${msg}`);
+        }
+    </script>
+</body>
+</html>

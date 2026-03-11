@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfólio Profissional - Alessandro Campelo">
+    <title>Alessandro Campelo | Portfólio</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        :root { --primary-color: #ff4500; }
+        .btn-ver { 
+            background-color: var(--primary-color); 
+            color: white; 
+            text-decoration: none; 
+            padding: 10px 20px; 
+            border-radius: 5px; 
+            display: inline-block;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+        .btn-ver:hover { background-color: #cc3700; transform: scale(1.05); }
+        .project-card { position: relative; overflow: hidden; }
+        .badge-dev {
+            position: absolute; top: 10px; right: 10px;
+            background: #f1c40f; color: #000; font-size: 0.7rem;
+            padding: 3px 8px; border-radius: 4px; font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <img src="imagens/ale.jpg" alt="Alessandro Campelo" class="profile-img" style="border: 3px solid #ff4500;" onerror="this.src='https://ui-avatars.com/api/?name=Alessandro+Campelo&background=ff4500&color=ffffff&size=180'">
+            <div class="header-text">
+                <h1>Alessandro Campelo</h1>
+                <p class="bio">Analista de Redes | Full Stack Developer</p>
+            </div>
+        </header>
+
+        <section class="skills">
+            <span class="skill-tag">Infraestrutura & Redes</span>
+            <span class="skill-tag">Web Design (HTML5/CSS3)</span>
+            <span class="skill-tag">JavaScript ES6+</span>
+            <span class="skill-tag">PHP & APIs de Pagamento</span>
+            <span class="skill-tag">Escrita Técnica Profissional</span>
+        </section>
+
+        <main class="projects-grid">
+            <article class="project-card">
+                <div class="project-icon">🔐</div>
+                <h3>Acesso Fitness</h3>
+                <p>Sistema de login com autenticação via EmailJS, validação de token e animações de boas-vindas.</p>
+                <a href="login.html" class="btn-ver">Explorar Projeto</a>
+            </article>
+
+            <article class="project-card">
+                <div class="project-icon">🍕</div>
+                <h3>Delivery System</h3>
+                <p>Interface de alta performance com seleção de tamanhos, bebidas e integração direta ao WhatsApp.</p>
+                <a href="DeliverySystem.html" class="btn-ver">Explorar Projeto</a>
+            </article>
+
+            <article class="project-card">
+                <span class="badge-dev">EM OBRA</span>
+                <div class="project-icon">💪</div>
+                <h3>Fitness Digital</h3>
+                <p>Landing page focada em hipertrofia em casa, com checkout funcional e design responsivo.</p>
+                <a href="fitness-digital.html" class="btn-ver">Ver Progresso</a>
+            </article>
+
+            <article class="project-card">
+                <span class="badge-dev">EM OBRA</span>
+                <div class="project-icon">⚙️</div>
+                <h3>Network Lab</h3>
+                <p>Documentação de topologias de rede e monitoramento de tráfego para ambientes corporativos.</p>
+                <a href="network-lab.html" class="btn-ver">Ver Terminal</a>
+            </article>
+        </main>
+
+        <footer>
+            <p id="dev-signature"></p>
+        </footer>
+    </div>
+
+    <script>
+        (function(){
+            const _txt = [68,101,115,101,110,118,111,108,118,101,100,111,114,32,65,108,101,115,115,97,110,100,114,111,32,67,97,109,112,101,108,111];
+            const _out = _txt.map(c => String.fromCharCode(c)).join('');
+            document.getElementById("dev-signature").innerHTML = `&copy; 2026 | ${_out}`;
+        })();
+    </script>
+</body>
+</html>
